@@ -1,0 +1,7 @@
+---
+- name: Playbook simples para imprimir mensagem
+  hosts: localhost
+  tasks:
+    - name: Exibir mensagem no console
+      ansible.builtin.debug:
+        msg: "Olá, esta é uma mensagem de exemplo do Ansible!"
