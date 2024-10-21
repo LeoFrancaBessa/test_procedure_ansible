@@ -1,6 +1,13 @@
 ---
 - name: Playbook simples para imprimir mensagem
   hosts: localhost
+  connection: local
+  gather_facts: false
+  vars:
+
+  vars_files:
+    - ~/.passwd_vars.yml
+
   tasks:
     - name: Exibir mensagem no console
       ansible.builtin.debug:
