@@ -36,11 +36,10 @@
 #   debug:
 #     var: proc_output
 
-tasks:
-- name: Exibir a primeira variável
+- name: "Ansible | Print a variable if defined"
   debug:
-    msg: "O valor da var1 é: {{ package_head }}"
+    msg: "{{ package_head }}"
 
-- name: Exibir a segunda variável
+- name: "Ansible | Print a message if a variable is undefined"
   debug:
-    msg: "O valor da var2 é: {{ package_body }}"
+    msg: "{{package_body}}"
