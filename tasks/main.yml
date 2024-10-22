@@ -1,0 +1,178 @@
+---
+- name: MAIN | Assert the procedure var is correct
+  ansible.builtin.assert:
+    that:
+      - procedure == 'create_user'
+        or procedure == 'lock_user'
+        or procedure == 'unlock_user'
+        or procedure == 'unlock_session'
+    msg: 'Procedure var is defined and correct.'
+    fail_msg: 'Procedure var may be undefined or incorrect param.'
+    quiet: true
+  tags:
+    - always
+
+- name: MAIN | Get sensivel data from vault
+  ansible.builtin.set_fact:
+    db_sgbd: "{{ logi | community.general.json_query(jq + '.sgbd') }}"
+    #db_sgbd: "dev"
+    db_host: "{{ logi | community.general.json_query(jq + '.host' ) }}"
+    #db_host: "10.1.1.80"
+    db_port: "{{ logi | community.general.json_query(jq + '.port') }}"
+    db_user: "{{ logi | community.general.json_query(jq + '.username') }}"
+    db_pass: "{{ logi | community.general.json_query(jq + '.password') }}"
+  vars:
+    jq: "db[?name == '{{ db_name }}'] | [0]"
+  no_log: true
+  tags:
+    - always
+
+- name: MAIN | Set new DB login password
+  ansible.builtin.set_fact:
+    new_password_db: "{{ lookup('ansible.builtin.password', \
+      '/dev/null chars=ascii_letters,digits length=11') }}"
+  no_log: true
+  when:
+    - procedure == 'create_user'
+  tags:
+    - always
+
+- name: MAIN | Debug
+  ansible.builtin.debug:
+    var: new_password_db
+  tags:
+    - never
+    - debug
+
+- name: MAIN | Set exception cases sufix
+  ansible.builtin.set_fact:
+    db_e: "{{ item.id }}"
+  when:
+    - db_name == item.db
+    - procedure == item.proc
+  loop: "{{ exceptions }}"
+  tags:
+    - always
+
+- name: MAIN | Validating User
+  ansible.builtin.shell:
+    cmd: "{{ lookup('ansible.builtin.template', \
+      './{{ db_sgbd }}_search_session.j2') }}"
+  register: proc_search_output
+  no_log: True
+  when:
+    - procedure == 'unlock_session'
+  tags:
+    - always
+
+#- name: MAIN | Debug
+#  ansible.builtin.debug:
+#    var: proc_search_output
+
+- name: MAIN | Formating SQLPlus output
+  ansible.builtin.set_fact:
+    formatted_output: "{{ proc_search_output.stdout_lines | map('regex_replace', '^\\s+', '') | map('regex_replace', '\\t', ',') | list }}"
+  no_log: True
+  when:
+    - procedure == 'unlock_session'
+  tags:
+    - always
+
+- name: MAIN | Debug
+  ansible.builtin.debug:
+    var: formatted_output
+  tags:
+    - never
+    - debug
+
+- name: MAIN | Execute SQL*Plus Procedure for Finish Session
+  ansible.builtin.shell:
+    cmd: "{{ lookup('ansible.builtin.template', \
+      './{{ db_sgbd }}_{{ procedure }}{{ db_e }}.j2') }}"
+  register: proc_output
+  no_log: True
+  with_items: "{{ formatted_output }}"
+  no_log: true
+  when:
+    - procedure == 'unlock_session'
+    - proc_search_output.stdout_lines is defined and proc_search_output.stdout_lines | length > 0
+  tags:
+    - always
+
+- name: MAIN | Execute SQL*Plus Procedure
+  ansible.builtin.shell:
+    cmd: "{{ lookup('ansible.builtin.template', \
+      './{{ db_sgbd }}_{{ procedure }}{{ db_e }}.j2') }}"
+  register: proc_output
+  changed_when: proc_output.rc != 0
+  no_log: true
+  when:
+    - procedure != 'unlock_session'
+  tags:
+    - always
+
+# WARNING: password in here.
+- name: MAIN | Debug
+  ansible.builtin.debug:
+    var: proc_output
+  tags:
+    - never
+    - debug_expose_password
+
+- name: MAIN | Set procedure status
+  ansible.builtin.set_fact:
+    proc_status: falha
+  when:
+    - procedure != 'unlock_session'
+    - "'ERROR' in proc_output.stdout"
+  tags:
+    - always
+
+- name: MAIN | Set procedure status for finish session
+  ansible.builtin.set_fact:
+    proc_status: falha
+  when:
+    - procedure == 'unlock_session'
+    - proc_search_output.stdout == ""
+  tags:
+    - always
+
+- name: MAIN | Templating Variables
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/hostname_vars.yml.j2"
+    dest: "{{ playbook_dir }}/.vars_{{ ticket_id }}.yml"
+    owner: ansible
+    group: ansible
+    mode: 0640
+  when:
+    - procedure != 'unlock_session'
+  tags:
+    - always
+
+- name: MAIN | Templating Variables for finish session
+  ansible.builtin.template:
+    src: "{{ role_path }}/templates/hostname_vars_session.yml.j2"
+    dest: "{{ playbook_dir }}/.vars_{{ ticket_id }}.yml"
+    owner: ansible
+    group: ansible
+    mode: 0640
+  when:
+    - procedure == 'unlock_session'
+  tags:
+    - always
+
+- name: MAIN | Debug
+  ansible.builtin.shell: |
+    cat {{ playbook_dir }}/.vars_{{ ticket_id }}.yml
+  register: debug_output
+  tags:
+    - never
+    - debug
+
+- name: MAIN | Debug
+  ansible.builtin.debug:
+    var: debug_output
+  tags:
+    - never
+    - debug
+...

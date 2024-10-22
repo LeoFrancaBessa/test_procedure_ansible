@@ -1,0 +1,9 @@
+---
+notification:
+  message: ["Sessão do usuário {{ username_db }} finalizada com {{ proc_status | default('sucesso') }}. Caso necessário, contate o Administrador."]
+  status: "{{ proc_status | default('sucesso') }}"
+  db_name: "{{ db_name }}"
+  username_db: "{{ username_db }}"
+  new_password_db: "{{ new_password_db | default('') }}"
+  procedure: "{{ procedure }}"
+...

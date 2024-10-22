@@ -1,0 +1,7 @@
+---
+sqlplus_path: /usr/local/bin
+exceptions:
+  - db: basebi.sefaz.ma.gov.br
+    id: _e1
+    proc: create_user
+...

@@ -1,0 +1,9 @@
+---
+notification:
+  message: "{{ proc_output.stdout_lines | regex_replace('\"', '') }}"
+  status: "{{ proc_status | default('sucesso') }}"
+  db_name: "{{ db_name }}"
+  username_db: "{{ username_db }}"
+  new_password_db: "{{ new_password_db | default('') }}"
+  procedure: "{{ procedure }}"
+...

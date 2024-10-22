@@ -1,0 +1,5 @@
+sqlplus -s /nolog <<EOF
+CONN {{ db_user }}/"{{ db_pass }}"@{{ db_host }}:{{ db_port }}/\
+{{ db_name }}
+ALTER SYSTEM KILL SESSION '{{ item }}' IMMEDIATE;
+EOF
