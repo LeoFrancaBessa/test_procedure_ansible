@@ -9,6 +9,5 @@
     db_pass: "{{ logi | community.general.json_query(jq + '.password') }}"
   vars:
     jq: "db[?name == '{{ db_name }}'] | [0]"
-  no_log: true
   tags:
     - always
