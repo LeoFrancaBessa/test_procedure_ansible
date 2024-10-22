@@ -1,9 +1,0 @@
-sqlplus -s /nolog <<EOF
-CONN {{ db_user }}/"{{ db_pass }}"@{{ db_host }}:{{ db_port }}/\
-{{ db_name }}
-ALTER TRIGGER ADM.TRIG_VERIFICA_OBJETOS DISABLE;
-CREATE USER {{ username_db }} IDENTIFIED BY "{{ new_password_db }}"
-PASSWORD EXPIRE;
-GRANT CREATE SESSION TO {{ username_db }};
-ALTER TRIGGER ADM.TRIG_VERIFICA_OBJETOS ENABLE;
-EOF

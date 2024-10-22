@@ -1,6 +1,0 @@
-sqlplus -s /nolog <<EOF
-CONN {{ db_user }}/"{{ db_pass }}"@{{ db_host }}:{{ db_port }}/\
-{{ db_name }}
-set pagesize 0 feedback off verify off heading off echo off
-select sid, serial# from v\$session where username = '{{ username_db | upper }}';
-EOF
