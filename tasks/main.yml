@@ -8,6 +8,6 @@
     db_user: "{{ logi | community.general.json_query(jq + '.username') }}"
     db_pass: "{{ logi | community.general.json_query(jq + '.password') }}"
   vars:
-    jq: "db[?name == '{{ db_name }}'] | [0]"
+    jq: "db[?name == '{{ DB_NAME }}'] | [0]"
   tags:
     - always
