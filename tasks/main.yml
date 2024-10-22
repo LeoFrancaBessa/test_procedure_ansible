@@ -16,6 +16,8 @@
   ansible.builtin.shell:
     cmd: "{{ lookup('ansible.builtin.template', \
       './execute_package_spec.j2') }}"
+    env:
+      NLS_LANG: "PORTUGUESE_BRAZIL.UTF8"
   register: proc_output
   tags:
     - always
@@ -28,6 +30,8 @@
   ansible.builtin.shell:
     cmd: "{{ lookup('ansible.builtin.template', \
       './execute_package_body.j2') }}"
+    env:
+      NLS_LANG: "PORTUGUESE_BRAZIL.UTF8"
   register: proc_output
   tags:
     - always
