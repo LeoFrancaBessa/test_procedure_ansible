@@ -17,6 +17,5 @@
     cmd: "{{ lookup('ansible.builtin.template', \
       './execute_package_spec.j2') }}"
   register: proc_output
-  no_log: True
   tags:
     - always
