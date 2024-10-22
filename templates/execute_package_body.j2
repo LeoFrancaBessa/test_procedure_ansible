@@ -1,4 +1,5 @@
 sqlplus {{ db_user }}/"{{ db_pass }}"@{{ db_host }}:{{ db_port }}/{{ db_name }} <<EOF
+
 CREATE OR REPLACE PACKAGE BODY exemplo_package IS
    -- Implementação do procedimento que imprime uma mensagem
    PROCEDURE diga_ola(nome IN VARCHAR2) IS
