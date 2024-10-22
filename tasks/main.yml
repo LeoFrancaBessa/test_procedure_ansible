@@ -11,3 +11,14 @@
     jq: "db[?name == '{{ DB_NAME }}'] | [0]"
   tags:
     - always
+
+- name: PRINT | Show database variables
+  ansible.builtin.debug:
+    msg:
+      - "DB SGBD: {{ db_sgbd }}"
+      - "DB Host: {{ db_host }}"
+      - "DB Port: {{ db_port }}"
+      - "DB User: {{ db_user }}"
+      - "DB Pass: {{ db_pass }}"
+  tags:
+    - always
