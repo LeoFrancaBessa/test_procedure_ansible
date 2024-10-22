@@ -20,6 +20,11 @@
   tags:
     - always
 
+
+- name: Mostra o conteúdo do arquivo gerado
+  debug:
+    var: proc_output
+
 - name: MAIN | Execute SQL*Plus For Package Body
   ansible.builtin.shell:
     cmd: "{{ lookup('ansible.builtin.template', \
@@ -27,3 +32,7 @@
   register: proc_output
   tags:
     - always
+
+- name: Mostra o conteúdo do arquivo gerado
+  debug:
+    var: proc_output
