@@ -1,13 +1,22 @@
-- name: MAIN | Get sensivel data from vault
-  ansible.builtin.set_fact:
-    db_sgbd: "{{ logi | community.general.json_query(jq + '.sgbd') }}"
-    #db_sgbd: "dev"
-    db_host: "{{ logi | community.general.json_query(jq + '.host' ) }}"
-    #db_host: "10.1.1.80"
-    db_port: "{{ logi | community.general.json_query(jq + '.port') }}"
-    db_user: "{{ logi | community.general.json_query(jq + '.username') }}"
-    db_pass: "{{ logi | community.general.json_query(jq + '.password') }}"
-  vars:
-    jq: "db[?name == '{{ DB_NAME }}'] | [0]"
+# - name: MAIN | Get sensivel data from vault
+#   ansible.builtin.set_fact:
+#     db_sgbd: "{{ logi | community.general.json_query(jq + '.sgbd') }}"
+#     #db_sgbd: "dev"
+#     db_host: "{{ logi | community.general.json_query(jq + '.host' ) }}"
+#     #db_host: "10.1.1.80"
+#     db_port: "{{ logi | community.general.json_query(jq + '.port') }}"
+#     db_user: "{{ logi | community.general.json_query(jq + '.username') }}"
+#     db_pass: "{{ logi | community.general.json_query(jq + '.password') }}"
+#   vars:
+#     jq: "db[?name == '{{ db_name }}'] | [0]"
+#   tags:
+#     - always
+
+- name: MAIN | Execute SQL*Plus For Package Spec
+  ansible.builtin.shell:
+    cmd: "{{ lookup('ansible.builtin.template', \
+      './execute_package_spec.j2') }}"
+  register: proc_output
+  no_log: True
   tags:
     - always
