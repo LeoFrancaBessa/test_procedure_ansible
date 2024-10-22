@@ -19,11 +19,6 @@
   register: proc_output
   tags:
     - always
-  register: resultado1
-
-- name: Mostra o conteúdo do arquivo gerado
-  debug:
-    var: resultado1
 
 - name: MAIN | Execute SQL*Plus For Package Body
   ansible.builtin.shell:
