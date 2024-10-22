@@ -12,27 +12,35 @@
 #   tags:
 #     - always
 
-- name: MAIN | Execute SQL*Plus For Package Spec
-  ansible.builtin.shell:
-    cmd: "{{ lookup('ansible.builtin.template', \
-      './execute_package_spec.j2') }}"
-  register: proc_output
-  tags:
-    - always
+# - name: MAIN | Execute SQL*Plus For Package Spec
+#   ansible.builtin.shell:
+#     cmd: "{{ lookup('ansible.builtin.template', \
+#       './execute_package_spec.j2') }}"
+#   register: proc_output
+#   tags:
+#     - always
 
+# - name: Mostra o conteúdo do arquivo gerado
+#   debug:
+#     var: proc_output
 
-- name: Mostra o conteúdo do arquivo gerado
-  debug:
-    var: proc_output
+# - name: MAIN | Execute SQL*Plus For Package Body
+#   ansible.builtin.shell:
+#     cmd: "{{ lookup('ansible.builtin.template', \
+#       './execute_package_body.j2') }}"
+#   register: proc_output
+#   tags:
+#     - always
 
-- name: MAIN | Execute SQL*Plus For Package Body
-  ansible.builtin.shell:
-    cmd: "{{ lookup('ansible.builtin.template', \
-      './execute_package_body.j2') }}"
-  register: proc_output
-  tags:
-    - always
+# - name: Mostra o conteúdo do arquivo gerado
+#   debug:
+#     var: proc_output
 
-- name: Mostra o conteúdo do arquivo gerado
-  debug:
-    var: proc_output
+tasks:
+  - name: Exibir a primeira variável
+    debug:
+      msg: "O valor da var1 é: {{ package_head }}"
+
+  - name: Exibir a segunda variável
+    debug:
+      msg: "O valor da var2 é: {{ package_body }}"
