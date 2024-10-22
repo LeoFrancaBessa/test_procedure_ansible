@@ -12,34 +12,26 @@
 #   tags:
 #     - always
 
-# - name: MAIN | Execute SQL*Plus For Package Spec
-#   ansible.builtin.shell:
-#     cmd: "{{ lookup('ansible.builtin.template', \
-#       './execute_package_spec.j2') }}"
-#   register: proc_output
-#   tags:
-#     - always
+- name: MAIN | Execute SQL*Plus For Package Spec
+  ansible.builtin.shell:
+    cmd: "{{ lookup('ansible.builtin.template', \
+      './execute_package_spec.j2') }}"
+  register: proc_output
+  tags:
+    - always
 
-# - name: Mostra o conteúdo do arquivo gerado
-#   debug:
-#     var: proc_output
-
-# - name: MAIN | Execute SQL*Plus For Package Body
-#   ansible.builtin.shell:
-#     cmd: "{{ lookup('ansible.builtin.template', \
-#       './execute_package_body.j2') }}"
-#   register: proc_output
-#   tags:
-#     - always
-
-# - name: Mostra o conteúdo do arquivo gerado
-#   debug:
-#     var: proc_output
-
-- name: "Ansible | Print a variable if defined"
+- name: Mostra o conteúdo do arquivo gerado
   debug:
-    msg: "{{ package_head }}"
+    var: proc_output
 
-- name: "Ansible | Print a message if a variable is undefined"
+- name: MAIN | Execute SQL*Plus For Package Body
+  ansible.builtin.shell:
+    cmd: "{{ lookup('ansible.builtin.template', \
+      './execute_package_body.j2') }}"
+  register: proc_output
+  tags:
+    - always
+
+- name: Mostra o conteúdo do arquivo gerado
   debug:
-    msg: "{{package_body}}"
+    var: proc_output
