@@ -19,3 +19,11 @@
   register: proc_output
   tags:
     - always
+
+- name: MAIN | Execute SQL*Plus For Package Body
+  ansible.builtin.shell:
+    cmd: "{{ lookup('ansible.builtin.template', \
+      './execute_package_body.j2') }}"
+  register: proc_output
+  tags:
+    - always
