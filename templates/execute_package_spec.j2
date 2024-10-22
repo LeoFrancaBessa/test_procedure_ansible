@@ -1,10 +1,4 @@
 sqlplus {{ db_user }}/"{{ db_pass }}"@{{ db_host }}:{{ db_port }}/{{ db_name }} <<EOF
-CREATE OR REPLACE PACKAGE exemplo_package IS
-   -- Procedimento que imprime uma mensagem
-   PROCEDURE diga_ola(nome IN VARCHAR2);
-
-   -- Função que retorna uma saudação personalizada
-   FUNCTION saudacao(nome IN VARCHAR2) RETURN VARCHAR2;
-END exemplo_package;
+{{package_head}}
 /
 EOF
