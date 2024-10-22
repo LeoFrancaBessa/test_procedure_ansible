@@ -23,7 +23,7 @@
 
 - name: Mostra o conteúdo do arquivo gerado
   debug:
-    var: resultado
+    var: resultado1
 
 - name: MAIN | Execute SQL*Plus For Package Body
   ansible.builtin.shell:
