@@ -37,10 +37,10 @@
 #     var: proc_output
 
 tasks:
-  - name: Exibir a primeira variável
-    debug:
-      msg: "O valor da var1 é: {{ package_head }}"
+- name: Exibir a primeira variável
+  debug:
+    msg: "O valor da var1 é: {{ package_head }}"
 
-  - name: Exibir a segunda variável
-    debug:
-      msg: "O valor da var2 é: {{ package_body }}"
+- name: Exibir a segunda variável
+  debug:
+    msg: "O valor da var2 é: {{ package_body }}"
