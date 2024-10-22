@@ -13,11 +13,9 @@
 #     - always
 
 - name: MAIN | Execute SQL*Plus For Package Spec
-  ansible.builtin.shell:
-    cmd: "{{ lookup('ansible.builtin.template', \
-      './execute_package_spec.j2') }}"
-    env:
-      NLS_LANG: "PORTUGUESE_BRAZIL.UTF8"
+  ansible.builtin.shell: |
+    export NLS_LANG=PORTUGUESE_BRAZIL.UTF8
+    {{ lookup('ansible.builtin.template', './execute_package_spec.j2') }}
   register: proc_output
   tags:
     - always
@@ -27,11 +25,9 @@
     var: proc_output
 
 - name: MAIN | Execute SQL*Plus For Package Body
-  ansible.builtin.shell:
-    cmd: "{{ lookup('ansible.builtin.template', \
-      './execute_package_body.j2') }}"
-    env:
-      NLS_LANG: "PORTUGUESE_BRAZIL.UTF8"
+  ansible.builtin.shell: |
+    export NLS_LANG=PORTUGUESE_BRAZIL.UTF8
+    {{ lookup('ansible.builtin.template', './execute_package_spec.j2') }}
   register: proc_output
   tags:
     - always
